@@ -1,0 +1,5 @@
+# Python 3.13. Only third-party dependency; everything else is stdlib.
+yfinance==1.7.0
+# yfinance pulls these; pinned to the versions this was tested with
+pandas==3.0.6
+numpy==2.5.4

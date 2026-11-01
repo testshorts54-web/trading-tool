@@ -1,0 +1,6 @@
+[
+ {"id": "rsi2-spy", "symbol": "SPY", "asset": "equity",
+  "entry": [["rsi_2", "<", 10], ["close", ">", "sma_200"]],
+  "stop": {"atr": 2.0}, "target": {"R": 1.5}, "time_exit_bars": 7,
+  "thesis": "Short-term oversold dip inside a long-term uptrend (backtest/rsi2 BASE rule)", "source": "backtest/rsi2", "variants": 1}
+]
