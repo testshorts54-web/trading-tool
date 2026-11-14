@@ -45,12 +45,16 @@ def null_test(bars, sig, stop_fn, tgt_fn, hold, cost, start, actual_mean, draws=
         means.append(m); ge += m >= actual_mean
     return dict(p_value=(ge + 1) / (len(means) + 1), draws=len(means), null_mean=st.mean(means) if means else None, signal_freq=p)
 
-def run(idea, hist, min_trades=C.MIN_TRADES, warmup=200, draws=C.NULL_DRAWS):
+def run(idea, hist, min_trades=C.MIN_TRADES, warmup=200, draws=C.NULL_DRAWS, extra=None):
     probs = idea.problems()
     if probs: return dict(idea=idea.id, verdict="REJECTED", reasons=probs)
     bars = hist["bars"]
     if len(bars) < warmup + 2 * min_trades: return dict(idea=idea.id, verdict="INSUFFICIENT", reasons=[f"only {len(bars)} bars"], source=hist.get("source"))
-    sig = scanners.evaluate(bars, idea.entry); stop_fn, tgt_fn, _ = exits(idea, bars)
+    miss = scanners.missing_inputs(bars, idea.entry, extra)
+    if miss:   # a metric with no data would silently give 0 trades; fail loudly instead
+        raise ValueError(f"idea {idea.id} ({idea.symbol}): rule metric(s) with no data: " + ", ".join(
+            f"{m} (needs field {'volume' if 'volr_' in m else 'OHLC/series'}: missing or all zero/None)" for m in miss) + f"; source {hist.get('source')}")
+    sig = scanners.evaluate(bars, idea.entry, extra); stop_fn, tgt_fn, _ = exits(idea, bars)
     split = warmup + int((len(bars) - warmup) * (1 - C.OOS_FRACTION))
     base_bp, stress_bp = C.COST_BPS[idea.asset]; out = dict(idea=idea.id, symbol=idea.symbol, source=hist.get("source"),
         data_from=str(bars[warmup]["date"]), data_to=str(bars[-1]["date"]), oos_from=str(bars[split]["date"]),
@@ -75,7 +79,7 @@ def run(idea, hist, min_trades=C.MIN_TRADES, warmup=200, draws=C.NULL_DRAWS):
     out["dsr"] = dsr([t["ret"] for t in stt["trades"]], idea.variants) if idea.variants > 1 else None
     first = idea.entry[0][0]; h = idea.time_exit_bars or 5
     try:
-        sv = scanners.series(bars, first) if isinstance(first, str) else None
+        sv = scanners.series(bars, first, extra=extra) if isinstance(first, str) else None
         fwd = [c[i + h] / c[i] - 1 if i + h < len(c) else None for i in range(len(c))]
         idx = range(warmup, len(c), h)
         out["ic"] = dict(metric=first, horizon_bars=h, spearman=ind.spearman_ic([sv[i] for i in idx], [fwd[i] for i in idx]) if sv else None,

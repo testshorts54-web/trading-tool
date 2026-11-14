@@ -3,12 +3,14 @@
   python3 pipeline.py collect                         list ideas + today's watch notes (scanner hits, volume flags, funding)
   python3 pipeline.py validate <id>                   backtest the written rule; writes out/validations/<id>.json
   python3 pipeline.py risk <id> --entry P --equity E  size and check a paper entry (needs a PASS validation)
-  python3 pipeline.py log  <id> --entry P --equity E  risk check, then append a paper row to trade-journal/paper-trades.csv"""
+  python3 pipeline.py log  <id> --entry P --equity E  risk check, then append a paper row to trade-journal/paper-trades.csv
+  python3 pipeline.py pooled <id> --symbols A,B,C [--oos-from 2023-01-01]   pooled multi-symbol validation (screen_batch.screen):
+      per-symbol + pooled stress-cost IS/OOS, 30 pooled trades each window, random-entry null, DSR; writes out/validations/<id>.json"""
 import sys, json, argparse
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 from tt import validate, risk, journal, indicators as ind
-from tt.ideas import schema, scanners
+from tt.ideas import schema, scanners, extras
 from tt.sources import history, perps
 
 ROOT = Path(__file__).parent; OUT = ROOT / "out"; IDEAS = ROOT / "ideas.json"
@@ -31,16 +33,33 @@ def collect(ideas):
     return dict(ideas=[dict(id=i.id, symbol=i.symbol, problems=i.problems()) for i in ideas.values()], watch_notes=notes, gaps=gaps,
                 note="watch notes are leads only; an idea needs a written entry/stop/exit in ideas.json before validation")
 
+def strict_variants(idea, ideas, symbols, registry):
+    """Stricter multiple-testing count: every idea in the batch file plus every distinct pooled symbol-set ever tried
+    (recorded in registry, a JSON list of "id|SYM,SYM" keys) counts as a variant. Never lower than idea.variants."""
+    tried = set(json.loads(registry.read_text())) if registry.exists() else set()
+    tried.add(f"{idea.id}|{','.join(sorted(symbols))}")
+    registry.parent.mkdir(parents=True, exist_ok=True); registry.write_text(json.dumps(sorted(tried), indent=1))
+    return max(idea.variants, len(ideas) + len(tried))
+
 def main(argv=None):
-    a = argparse.ArgumentParser(); a.add_argument("cmd", choices=["collect", "validate", "risk", "log"]); a.add_argument("id", nargs="?")
+    a = argparse.ArgumentParser(); a.add_argument("cmd", choices=["collect", "validate", "risk", "log", "pooled"]); a.add_argument("id", nargs="?")
     a.add_argument("--entry", type=float); a.add_argument("--equity", type=float); a.add_argument("--ideas", default=str(IDEAS))
+    a.add_argument("--symbols"); a.add_argument("--oos-from", default="2023-01-01"); a.add_argument("--draws", type=int, default=200)
+    a.add_argument("--strict-mt", action="store_true", help="pooled: count all ideas + every pooled symbol-set tried as DSR variants")
     a.add_argument("--journal", default=str(journal.PAPER_CSV)); a.add_argument("--out", default=str(OUT))
     x = a.parse_args(argv); ideas = schema.load(x.ideas); out = Path(x.out)
     if x.cmd == "collect": print(json.dumps(collect(ideas), indent=1)); return
     idea = ideas[x.id]; vp = out / "validations" / f"{idea.id}.json"
+    if x.cmd == "pooled":
+        import datetime as dt
+        from screen_batch import screen
+        if x.symbols: idea.coins = x.symbols.split(",")
+        if x.strict_mt: idea.variants = strict_variants(idea, ideas, idea.coins or [idea.symbol], out / "mt_registry.json")
+        r = screen((idea, dt.date.fromisoformat(x.oos_from), x.draws)); r.pop("_daily_oos", None); r["mode"] = "pooled"; r["variants"] = idea.variants; r["strict_mt"] = x.strict_mt
+        vp.parent.mkdir(parents=True, exist_ok=True); vp.write_text(json.dumps(r, indent=1, default=str)); print(json.dumps(r, indent=1, default=str)); return
     if x.cmd == "validate":
         h = history.load(idea.symbol, idea.asset)
-        r = dict(idea=idea.id, verdict="INSUFFICIENT", reasons=[h["error"]]) if "error" in h else validate.run(idea, h)
+        r = dict(idea=idea.id, verdict="INSUFFICIENT", reasons=[h["error"]]) if "error" in h else validate.run(idea, h, extra=extras.build(h["bars"], idea.entry, history.load, idea.asset))
         vp.parent.mkdir(parents=True, exist_ok=True); vp.write_text(json.dumps(r, indent=1, default=str)); print(json.dumps(r, indent=1, default=str)); return
     v = json.loads(vp.read_text()) if vp.exists() else {}
     h = history.load(idea.symbol, idea.asset); atr = None

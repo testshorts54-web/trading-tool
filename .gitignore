@@ -1,3 +1,23 @@
+# caches / build junk
+.venv/
+venv/
 __pycache__/
-out/
 *.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+node_modules/
+dist/
+.DS_Store
+
+# secrets / env / keys
+.env
+.env.*
+*.pem
+*.key
+
+# data caches and paper-sim run ledgers
+out/
+predict_paper/run-*/
+predict_paper/queue-*/

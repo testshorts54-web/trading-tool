@@ -14,6 +14,8 @@ class Idea:
     side: str = "long"
     thesis: str = ""; source: str = "manual"
     variants: int = 1                              # how many versions were tried before this one (for DSR)
+    coins: list = None                             # optional basket for screen_batch.py (pooled test); validate uses symbol
+    status: str = "idea"                           # idea | screened-pass | screened-fail | insufficient | killed
 
     def problems(self):
         p = []

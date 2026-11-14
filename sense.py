@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Part A: market regime readout from free public daily data. Read-only; not financial advice.
-Usage: python3 sense.py [--json]   -> out/YYYY-MM-DD.md, out/YYYY-MM-DD.json, out/history.json"""
+Usage: python3 sense.py [--json]   -> out/YYYY-MM-DD.md, out/YYYY-MM-DD.json, out/history.json
+       python3 sense.py --vp BTC ALGO [--interval 1h|15m] [--days 30] [--bins 50]   -> volume profile lines only"""
 import sys, json, datetime as dt
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
@@ -8,6 +9,7 @@ from zoneinfo import ZoneInfo
 sys.path.insert(0, str(Path(__file__).parent))
 from tt.sources import equities, crypto, fred, perps, sentiment, venues
 from tt.regime import equities as req, crypto as rcr, combine
+from tt import volprofile
 
 OUT = Path(__file__).parent / "out"
 ETF = ["SPY", "QQQ", "IWM", "RSP", "TLT", "HYG", "UUP", "GLD", "USO"]   # UUP = dollar proxy, GLD gold, USO oil
@@ -69,7 +71,29 @@ def md(R):
     L += ["", "**Gaps:** " + ("; ".join(R["gaps"]) if R["gaps"] else "none")]
     return "\n".join(L) + "\n"
 
+def vp_line(base, interval="1h", days=30, bins=50, min_candles=100):
+    per_day = {"1h": 24, "15m": 96}[interval]; n = days * per_day
+    try:
+        k = crypto.binance_klines(base, interval, min(n, 1000))
+    except Exception as e:
+        return f"{base} volume profile: UNKNOWN ({str(e)[:160]})"
+    p = volprofile.volume_profile(k["candles"], bins=bins, lookback=n, min_candles=min_candles)
+    if p is None:
+        return f"{base} volume profile: UNKNOWN (missing/zero volume or < {min_candles} candles; got {len(k['candles'])})"
+    q = volprofile.position(p); f = lambda x: f"{x:.6g}"
+    lvn = (f"{f(q['nearest_lvn'][0])}-{f(q['nearest_lvn'][1])} ({"price inside it" if q["nearest_lvn_dist_pct"] == 0 else f"{q['nearest_lvn_dist_pct']:.1%} away"})" if q["nearest_lvn"] else "none")
+    asof = dt.datetime.fromtimestamp(k["candles"][-1]["ts"] / 1000, ZoneInfo("America/New_York")).strftime("%Y-%m-%d %H:%M ET")
+    return (f"{base} volume profile ({p['candles']} x {interval}, {bins} bins, last candle open {asof}): price {f(q['price'])} | "
+            f"POC {f(p['poc'])} ({q['vs_poc']}) | value area {f(p['val'])}-{f(p['vah'])} ({p['va_volume_pct']:.0%} vol) -> "
+            f"{q['vs_value_area'].upper()} | nearest LVN {lvn} | {k['source']}")
+
 def main():
+    if "--vp" in sys.argv:
+        a = sys.argv[sys.argv.index("--vp") + 1:]; opt = lambda k, d: a[a.index(k) + 1] if k in a else d
+        syms = [x for i, x in enumerate(a) if not x.startswith("--") and (i == 0 or not a[i - 1].startswith("--"))]
+        for s in syms or ["BTC"]:
+            print(vp_line(s, opt("--interval", "1h"), int(opt("--days", 30)), int(opt("--bins", 50))))
+        return
     today = dt.datetime.now(ZoneInfo("America/New_York")).date()
     R = build(fetch(), today)
     OUT.mkdir(exist_ok=True); hp = OUT / "history.json"

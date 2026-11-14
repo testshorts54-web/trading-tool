@@ -1,26 +1,31 @@
 """Long daily OHLC history for validation. Local CSVs first (reuses /workspace/backtest/data[2] and
 /workspace/crypto-strategies/data), then a public fallback (yfinance for equities, Coinbase for crypto).
-Returns dict(bars=[{date, open, high, low, close}], source, asof) or dict(error=...)."""
+Returns dict(bars=[{date, open, high, low, close[, volume]}], source, asof) or dict(error=...)."""
 import csv, datetime as dt
 from pathlib import Path
 EQ_DIRS = [Path("/workspace/backtest/data"), Path("/workspace/backtest/data2")]
 CRYPTO_DIR = Path("/workspace/crypto-strategies/data")
+CRYPTO_DIRS = [CRYPTO_DIR, Path("/workspace/crypto-strategies/alts/data")]   # alts: Coinbase daily, 62 alts incl. delisted
 
 def read_csv(path):
     bars = []
     for r in csv.DictReader(open(path)):
-        try: bars.append(dict(date=dt.date.fromisoformat(r["date"][:10]), **{k: float(r[k]) for k in ("open", "high", "low", "close")}))
+        try: b = dict(date=dt.date.fromisoformat(r["date"][:10]), **{k: float(r[k]) for k in ("open", "high", "low", "close")})
         except (KeyError, ValueError): continue
+        try: b["volume"] = float(r["volume"])
+        except (KeyError, TypeError, ValueError): pass
+        bars.append(b)
     return bars
 
 def _yf(sym):
     import yfinance as yf
     df = yf.Ticker(sym).history(period="max", interval="1d", auto_adjust=True).dropna(subset=["Close"])
-    return [dict(date=d.date(), open=float(o), high=float(h), low=float(l), close=float(c))
-            for d, o, h, l, c in zip(df.index, df["Open"], df["High"], df["Low"], df["Close"])]
+    return [dict(date=d.date(), open=float(o), high=float(h), low=float(l), close=float(c), volume=float(v))
+            for d, o, h, l, c, v in zip(df.index, df["Open"], df["High"], df["Low"], df["Close"], df["Volume"])
+            if d.date() < dt.date.today()]   # drop today's still-open partial bar
 
 def load(symbol, asset):
-    cands = [CRYPTO_DIR / f"{symbol}_1d.csv"] if asset == "crypto" else [d / f"{symbol}.csv" for d in EQ_DIRS]
+    cands = [d / f"{symbol}_1d.csv" for d in CRYPTO_DIRS] if asset == "crypto" else [d / f"{symbol}.csv" for d in EQ_DIRS]
     for p in cands:
         if p.exists():
             b = read_csv(p)

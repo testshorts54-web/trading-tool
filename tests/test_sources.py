@@ -3,7 +3,7 @@ Hyperliquid parsing and its POST allowlist, stablecoin change, hourly candle fix
 import unittest
 from pathlib import Path
 from tt import http
-from tt.sources import venues as V, perps, sentiment, crypto
+from tt.sources import venues as V, perps, sentiment, crypto, series
 FX = Path(__file__).parent / "fixtures"
 
 def q(venue, bid, ask, source_id=None, ccy="USD"): return V.Quote(venue, "BTC/USD", bid, ask, None, source_id or f"{venue}:ticker", ccy)
@@ -42,6 +42,21 @@ class Perps(unittest.TestCase):
         with self.assertRaises(ValueError): http.hl_info({"type": "metaAndAssetCtxs"}, url="https://api.hyperliquid.xyz/other")
         for bad in ({"type": "order"}, {"type": "clearinghouseState", "user": "0x0"}, "metaAndAssetCtxs"):
             with self.assertRaises(ValueError): http.hl_info(bad)
+
+class Series(unittest.TestCase):
+    def test_get_allowlist_refuses_before_network(self):
+        self.assertEqual(series.ALLOWED_HOSTS, {"data.binance.vision", "community-api.coinmetrics.io", "stablecoins.llama.fi"})
+        for bad in ("https://fapi.binance.com/fapi/v1/fundingRate", "http://stablecoins.llama.fi/x", "https://evil.example/community-api.coinmetrics.io"):
+            with self.assertRaises(ValueError): series.fetch(bad)
+    def test_sma_and_ext_lag(self):
+        import datetime as dt
+        from unittest import mock
+        from tt.ideas import extras
+        d0 = dt.date(2024, 1, 1); s = {d0 + dt.timedelta(i): float(i) for i in range(5)}
+        self.assertEqual(series.sma(s, 2)[d0 + dt.timedelta(1)], 0.5)
+        bars = [dict(date=d0 + dt.timedelta(i)) for i in range(3)]
+        with mock.patch.object(series, "load", return_value=s):
+            self.assertEqual(extras.build(bars, [["ext:mvrv", ">", 1]], None)["ext:mvrv"], [None, 0.0, 1.0])   # bar D sees D-1
 
 class Misc(unittest.TestCase):
     def test_stablecoin_change(self):

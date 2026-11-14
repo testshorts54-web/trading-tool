@@ -73,6 +73,21 @@ class EndToEnd(unittest.TestCase):
     def test_too_few_trades_is_insufficient(self):
         v = validate.run(idea(), dict(bars=bars_with_edge(600)), draws=10)
         self.assertEqual(v["verdict"], "INSUFFICIENT"); self.assertIn("insufficient data", v["reasons"][0])
+    def test_missing_or_zero_volume_raises(self):
+        for vol in (None, 0.0):   # no volume column / all-zero volume must not silently give 0 trades
+            b = bars_with_edge()
+            if vol is not None:
+                for x in b: x["volume"] = vol
+            with self.assertRaisesRegex(ValueError, r"idea t .*volr_20 \(needs field volume"):
+                validate.run(idea(entry=[["volr_20", ">", 1.5]]), dict(bars=b, source="synthetic"), draws=10)
+    def test_yahoo_loader_keeps_volume(self):
+        import sys, types, pandas as pd
+        from unittest import mock
+        from tt.sources import history
+        df = pd.DataFrame(dict(Open=[1.0], High=[2.0], Low=[0.5], Close=[1.5], Volume=[1234]), index=pd.to_datetime(["2026-11-02"]))
+        fake = types.SimpleNamespace(Ticker=lambda s: types.SimpleNamespace(history=lambda **k: df))
+        with mock.patch.dict(sys.modules, yfinance=fake):
+            self.assertEqual(history._yf("X"), [dict(date=dt.date(2026, 11, 2), open=1.0, high=2.0, low=0.5, close=1.5, volume=1234.0)])
     def test_stress_costs_and_header(self):
         self.assertEqual(C.COST_BPS, {"equity": (10, 20), "crypto": (25, 90)})
         self.assertEqual(journal.HEADER, next(csv.reader(open(journal.PAPER_CSV))))

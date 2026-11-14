@@ -1,6 +1,2339 @@
 [
- {"id": "rsi2-spy", "symbol": "SPY", "asset": "equity",
-  "entry": [["rsi_2", "<", 10], ["close", ">", "sma_200"]],
-  "stop": {"atr": 2.0}, "target": {"R": 1.5}, "time_exit_bars": 7,
-  "thesis": "Short-term oversold dip inside a long-term uptrend (backtest/rsi2 BASE rule)", "source": "backtest/rsi2", "variants": 1}
+ {
+  "id": "rsi2-spy",
+  "symbol": "SPY",
+  "asset": "equity",
+  "entry": [
+   [
+    "rsi_2",
+    "<",
+    10
+   ],
+   [
+    "close",
+    ">",
+    "sma_200"
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 7,
+  "thesis": "Short-term oversold dip inside a long-term uptrend (backtest/rsi2 BASE rule)",
+  "source": "backtest/rsi2",
+  "variants": 1,
+  "status": "screened-fail"
+ },
+ {
+  "id": "g01-tsmom7-majors",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ret_7",
+    ">",
+    0
+   ]
+  ],
+  "stop": {
+   "atr": 3
+  },
+  "thesis": "1-week time-series momentum (Liu-Tsyvinski RFS 2021): long when 7d return > 0, hold 7d",
+  "source": "out/idea-mining/2026-11-01 #2 (link fixed to SSRN 3226952)",
+  "variants": 1,
+  "coins": [
+   "BTC-USD",
+   "ETH-USD",
+   "SOL-USD",
+   "XRP-USD",
+   "LTC-USD",
+   "BCH-USD",
+   "ADA-USD",
+   "DOGE-USD",
+   "LINK-USD",
+   "AVAX-USD",
+   "DOT-USD",
+   "XLM-USD",
+   "ETC-USD"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 7
+ },
+ {
+  "id": "g02-sma20-btceth",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_20"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "thesis": "Price above 20d SMA predicts returns (Detzel et al. FIMA); re-entry every 5d while above",
+  "source": "out/idea-mining/2026-11-01 #1",
+  "variants": 1,
+  "coins": [
+   "BTC-USD",
+   "ETH-USD"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 5
+ },
+ {
+  "id": "g03-range50-brk-majors",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "close",
+    ">",
+    "hh_50"
+   ]
+  ],
+  "stop": {
+   "atr": 3
+  },
+  "thesis": "50-day trading-range breakout (Gerritsen et al. FRL 2019); 1% band dropped (engine)",
+  "source": "out/idea-mining/2026-11-01 #4",
+  "variants": 1,
+  "coins": [
+   "BTC-USD",
+   "ETH-USD",
+   "SOL-USD",
+   "XRP-USD",
+   "LTC-USD",
+   "BCH-USD",
+   "ADA-USD",
+   "DOGE-USD",
+   "LINK-USD",
+   "AVAX-USD",
+   "DOT-USD",
+   "XLM-USD",
+   "ETC-USD"
+  ],
+  "status": "screened-pass",
+  "time_exit_bars": 20
+ },
+ {
+  "id": "g04-sma50-majors4",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_50"
+   ],
+   [
+    "ret_1",
+    ">",
+    0
+   ]
+  ],
+  "stop": {
+   "atr": 3
+  },
+  "thesis": "MA(50) rule survives White's reality check (Hudson-Urquhart AOR); up-day confirmation instead of 1% band",
+  "source": "out/idea-mining/2026-11-01 #5",
+  "variants": 1,
+  "coins": [
+   "BTC-USD",
+   "ETH-USD",
+   "LTC-USD",
+   "XRP-USD"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 10
+ },
+ {
+  "id": "g05-abret-mom-majors",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ret_1",
+    ">",
+    0.07
+   ]
+  ],
+  "stop": {
+   "atr": 2
+  },
+  "thesis": "Momentum after one-day abnormal return (Caporale-Plastun FMPM 2020); fixed 7% as ~2 sigma proxy",
+  "source": "out/idea-mining/2026-11-01 #7",
+  "variants": 1,
+  "coins": [
+   "BTC-USD",
+   "ETH-USD",
+   "SOL-USD",
+   "XRP-USD",
+   "LTC-USD",
+   "BCH-USD",
+   "ADA-USD",
+   "DOGE-USD",
+   "LINK-USD",
+   "AVAX-USD",
+   "DOT-USD",
+   "XLM-USD",
+   "ETC-USD"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 5
+ },
+ {
+  "id": "g06-st-reversal-all",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ret_1",
+    "<",
+    -0.1
+   ]
+  ],
+  "stop": {
+   "pct": 15
+  },
+  "thesis": "Short-term reversal after big 1-day loss (Zaremba et al. IRFA 2021; arXiv 1903.06033)",
+  "source": "out/idea-mining/2026-11-01 #6/56/59",
+  "variants": 1,
+  "coins": [
+   "ALL"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 3
+ },
+ {
+  "id": "g07-bb-squeeze-majors",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "bbwp_120",
+    "<=",
+    0.1
+   ],
+   [
+    "close",
+    ">",
+    "sma_20"
+   ]
+  ],
+  "stop": {
+   "atr": 2
+  },
+  "thesis": "Bollinger-width squeeze (bottom decile of 120d) with price above mid-band (QuantifiedStrategies, page blocked)",
+  "source": "out/idea-mining/2026-11-01 #10",
+  "variants": 1,
+  "coins": [
+   "BTC-USD",
+   "ETH-USD",
+   "SOL-USD",
+   "XRP-USD",
+   "LTC-USD",
+   "BCH-USD",
+   "ADA-USD",
+   "DOGE-USD",
+   "LINK-USD",
+   "AVAX-USD",
+   "DOT-USD",
+   "XLM-USD",
+   "ETC-USD"
+  ],
+  "status": "screened-fail",
+  "target": {
+   "R": 2
+  },
+  "time_exit_bars": 10
+ },
+ {
+  "id": "g08-max20-volexp-btc",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "close",
+    ">",
+    "hh_20"
+   ],
+   [
+    "atr_10",
+    ">",
+    "atr_30"
+   ]
+  ],
+  "stop": {
+   "atr": 3
+  },
+  "thesis": "New 20d high with expanding vol (Quantpedia BTC trend post)",
+  "source": "out/idea-mining/2026-11-01 #14",
+  "variants": 1,
+  "coins": [
+   "BTC-USD"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 10
+ },
+ {
+  "id": "g09-min10-sma200-btceth",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "close",
+    "<=",
+    "ll_10"
+   ],
+   [
+    "close",
+    ">",
+    "sma_200"
+   ]
+  ],
+  "stop": {
+   "pct": 10
+  },
+  "thesis": "Buy 10d low inside 200d uptrend (Quantpedia revisiting MIN)",
+  "source": "out/idea-mining/2026-11-01 #55",
+  "variants": 1,
+  "coins": [
+   "BTC-USD",
+   "ETH-USD"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 10
+ },
+ {
+  "id": "g10-monday-trend-btc",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "dow",
+    "==",
+    6
+   ],
+   [
+    "close",
+    ">",
+    "sma_20"
+   ]
+  ],
+  "stop": {
+   "pct": 6
+  },
+  "thesis": "Sunday-close signal, enter Monday open, hold Mon-Tue if above 20d SMA (Caporale-Plastun DOW FRL 2019)",
+  "source": "out/idea-mining/2026-11-01 #17/21",
+  "variants": 1,
+  "coins": [
+   "BTC-USD"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 2
+ },
+ {
+  "id": "g11-sunday-dip-btceth",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "dow",
+    "==",
+    6
+   ],
+   [
+    "ret_2",
+    "<",
+    0
+   ],
+   [
+    "rsi_14",
+    "<",
+    50
+   ]
+  ],
+  "stop": {
+   "pct": 5
+  },
+  "thesis": "Sunday below Friday close, RSI<50: buy Monday open, sell Wed (Aharon-Qadan DOW FRL 2019)",
+  "source": "out/idea-mining/2026-11-01 #22",
+  "variants": 1,
+  "coins": [
+   "BTC-USD",
+   "ETH-USD"
+  ],
+  "status": "screened-fail",
+  "target": {
+   "pct": 5
+  },
+  "time_exit_bars": 3
+ },
+ {
+  "id": "g12-late-month-btc",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "dom",
+    ">=",
+    28
+   ]
+  ],
+  "stop": {
+   "pct": 7
+  },
+  "thesis": "Turn-of-month drift: enter from day 29 open, hold 6d (TOTM claim; source DOI was 404, folklore)",
+  "source": "out/idea-mining/2026-11-01 #20",
+  "variants": 1,
+  "coins": [
+   "BTC-USD"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 6
+ },
+ {
+  "id": "g13-q4-trend-btc",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "month",
+    ">=",
+    10
+   ],
+   [
+    "close",
+    ">",
+    "sma_200"
+   ]
+  ],
+  "stop": {
+   "atr": 4
+  },
+  "thesis": "Q4 seasonality in uptrend (folklore, unverified)",
+  "source": "out/idea-mining/2026-11-01 #24",
+  "variants": 1,
+  "coins": [
+   "BTC-USD"
+  ],
+  "status": "insufficient",
+  "time_exit_bars": 30
+ },
+ {
+  "id": "g14-rs-btc14-all",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ret_14",
+    ">",
+    "BTC-USD:ret_14"
+   ],
+   [
+    "close",
+    ">",
+    "sma_50"
+   ],
+   [
+    "BTC-USD:close",
+    ">",
+    "BTC-USD:sma_100"
+   ]
+  ],
+  "stop": {
+   "atr": 3
+  },
+  "thesis": "Coin beating BTC over 14d, above 50d SMA, BTC regime on (Liu-Tsyvinski-Wu momentum; Begusic-Kostanjcar)",
+  "source": "out/idea-mining/2026-11-01 #8/27",
+  "variants": 1,
+  "coins": [
+   "ALL"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 7
+ },
+ {
+  "id": "g15-near52wk-all",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "dd_365",
+    ">",
+    -0.1
+   ],
+   [
+    "BTC-USD:close",
+    ">",
+    "BTC-USD:sma_100"
+   ]
+  ],
+  "stop": {
+   "atr": 3
+  },
+  "thesis": "Within 10% of 52-week high close, BTC regime on (anchoring; Quantpedia URL 404, concept from 52wk-high literature)",
+  "source": "out/idea-mining/2026-11-01 #31",
+  "variants": 1,
+  "coins": [
+   "ALL"
+  ],
+  "status": "screened-pass",
+  "time_exit_bars": 14
+ },
+ {
+  "id": "g16-ethbtc-rs",
+  "symbol": "ETH-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ret_21",
+    ">",
+    "BTC-USD:ret_21"
+   ],
+   [
+    "close",
+    ">",
+    "sma_50"
+   ]
+  ],
+  "stop": {
+   "atr": 3
+  },
+  "thesis": "ETH/BTC trend rotation proxy: ETH outperforming BTC over 21d and above 50d SMA (folklore)",
+  "source": "out/idea-mining/2026-11-01 #30",
+  "variants": 1,
+  "coins": [
+   "ETH-USD"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 10
+ },
+ {
+  "id": "g17-bmsb-btc",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_140"
+   ],
+   [
+    "close",
+    ">",
+    "ema_147"
+   ]
+  ],
+  "stop": {
+   "atr": 3
+  },
+  "thesis": "Bull-market support band (20w SMA / 21w EMA) (folklore; source homepage only)",
+  "source": "out/idea-mining/2026-11-01 #47",
+  "variants": 1,
+  "coins": [
+   "BTC-USD"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 10
+ },
+ {
+  "id": "g18-washout-vol-majors",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ret_4",
+    "<",
+    -0.08
+   ],
+   [
+    "volr_20",
+    ">",
+    2.5
+   ],
+   [
+    "close",
+    ">",
+    "sma_100"
+   ]
+  ],
+  "stop": {
+   "atr": 2
+  },
+  "thesis": "4-day flush on 2.5x volume inside uptrend (unverified folklore)",
+  "source": "out/idea-mining/2026-11-01 #57",
+  "variants": 1,
+  "coins": [
+   "BTC-USD",
+   "ETH-USD",
+   "SOL-USD",
+   "XRP-USD",
+   "LTC-USD",
+   "BCH-USD",
+   "ADA-USD",
+   "DOGE-USD",
+   "LINK-USD",
+   "AVAX-USD",
+   "DOT-USD",
+   "XLM-USD",
+   "ETC-USD"
+  ],
+  "status": "insufficient",
+  "time_exit_bars": 5
+ },
+ {
+  "id": "g19-pullback15-majors",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "dd_30",
+    "<",
+    -0.15
+   ],
+   [
+    "dd_30",
+    ">",
+    -0.25
+   ],
+   [
+    "sma_50",
+    ">",
+    "sma_200"
+   ]
+  ],
+  "stop": {
+   "pct": 12
+  },
+  "thesis": "15-25% pullback from 30d high in golden-cross regime (unverified folklore)",
+  "source": "out/idea-mining/2026-11-01 #61",
+  "variants": 1,
+  "coins": [
+   "BTC-USD",
+   "ETH-USD",
+   "SOL-USD",
+   "XRP-USD",
+   "LTC-USD",
+   "BCH-USD",
+   "ADA-USD",
+   "DOGE-USD",
+   "LINK-USD",
+   "AVAX-USD",
+   "DOT-USD",
+   "XLM-USD",
+   "ETC-USD"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 10
+ },
+ {
+  "id": "g20-sma65-btceth",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_65"
+   ],
+   [
+    "BTC-USD:close",
+    ">",
+    "BTC-USD:sma_100"
+   ]
+  ],
+  "stop": {
+   "atr": 3
+  },
+  "thesis": "65-day MA trend with BTC regime (Le-Ruthbah SSRN 4551518 blocked; Reddit 65d z-score post)",
+  "source": "out/idea-mining/2026-11-01 #9/43",
+  "variants": 1,
+  "coins": [
+   "BTC-USD",
+   "ETH-USD"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 5
+ },
+ {
+  "id": "g21-reversal-regime-all",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ret_1",
+    "<",
+    -0.1
+   ],
+   [
+    "BTC-USD:close",
+    ">",
+    "BTC-USD:sma_100"
+   ]
+  ],
+  "stop": {
+   "pct": 15
+  },
+  "thesis": "Same as g06 but only when BTC > SMA100 (regime filter that survived before)",
+  "source": "out/idea-mining/2026-11-01 #6/56",
+  "variants": 1,
+  "coins": [
+   "ALL"
+  ],
+  "status": "screened-fail",
+  "time_exit_bars": 3
+ },
+ {
+  "id": "n01-funding-neg-btc",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ext:funding_BTCUSDT",
+    "<",
+    -0.0005
+   ],
+   [
+    "close",
+    ">",
+    "sma_200"
+   ]
+  ],
+  "stop": {
+   "pct": 6
+  },
+  "time_exit_bars": 14,
+  "thesis": "Perp funding capitulation: daily mean of 8h Binance funding < -0.05% while close > SMA200; written exit 'funding back above 0' not supported, 14d time exit kept (practitioner claim, unverified)",
+  "source": "out/idea-mining/2026-11-01/candidates_raw.json 'Perpetual Funding Rate Capitulation Long'; BTC only (ETH needs per-coin series)",
+  "variants": 1,
+  "coins": [
+   "BTC-USD"
+  ],
+  "status": "insufficient"
+ },
+ {
+  "id": "n02-btcd-alt-rotation",
+  "symbol": "ETH-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ext:btcd",
+    "<",
+    "ext:btcd.sma_50"
+   ],
+   [
+    "BTC-USD:close",
+    ">",
+    "BTC-USD:sma_200"
+   ]
+  ],
+  "stop": {
+   "pct": 8
+  },
+  "time_exit_bars": 10,
+  "thesis": "Alts when BTC dominance < its 50d SMA and BTC > SMA200; dominance is a proxy (8 coins + stablecoins); 8% trailing stop -> fixed 8%, signal exit -> 10d re-entry (blog, unverified)",
+  "source": "out/idea-mining/2026-11-01/candidates_raw.json 'Bitcoin Dominance Trend-Filtered Altcoin Rotation'",
+  "variants": 1,
+  "coins": [
+   "ETH-USD",
+   "XRP-USD",
+   "SOL-USD",
+   "ADA-USD",
+   "DOGE-USD"
+  ],
+  "status": "screened-fail"
+ },
+ {
+  "id": "n03-realized-price-btc",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ext:mvrv",
+    ">",
+    1.03
+   ]
+  ],
+  "stop": {
+   "pct": 8
+  },
+  "time_exit_bars": 30,
+  "thesis": "Price > 1.03x realized price (MVRV > 1.03, Coin Metrics, 1-day lag); 8% trailing stop -> fixed 8%, signal exit -> 30d re-entry (blog, unverified)",
+  "source": "out/idea-mining/2026-11-01/candidates_raw.json 'Realized Price Cost-Basis Crossover with 3% Buffer'",
+  "variants": 1,
+  "coins": [
+   "BTC-USD"
+  ],
+  "status": "screened-fail"
+ },
+ {
+  "id": "crown-a-rsp-breadth",
+  "symbol": "RSP",
+  "asset": "equity",
+  "entry": [
+   [
+    "ret_20",
+    ">",
+    "SPY:ret_20"
+   ],
+   [
+    "close",
+    ">",
+    "sma_200"
+   ],
+   [
+    "volr_20",
+    ">=",
+    1.2
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": {
+   "R": 2.0
+  },
+  "time_exit_bars": 20,
+  "thesis": "Crown breadth rotation: equal-weight leads cap-weight over 20d, RSP in long uptrend, RSP volume >=1.2x 20d avg confirms",
+  "source": "crown-insights/play_2026-11-03.md (Crown Macro distill; rules written before data)",
+  "variants": 1,
+  "status": "insufficient"
+ },
+ {
+  "id": "crown-b1-smh-rs-reclaim",
+  "symbol": "SMH",
+  "asset": "equity",
+  "entry": [
+   [
+    "ret_20",
+    ">",
+    "SPY:ret_20"
+   ],
+   [
+    "close",
+    ">",
+    "sma_50"
+   ],
+   [
+    "volr_20",
+    ">=",
+    1.5
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": {
+   "R": 2.0
+  },
+  "time_exit_bars": 10,
+  "thesis": "Semis only re-bought after confirmed relative strength vs SPY plus reclaim of 50d on 1.5x volume (wait-for-confirmation after Oct 30 breakdown)",
+  "source": "crown-insights/play_2026-11-03.md (Crown Macro distill; rules written before data)",
+  "variants": 2,
+  "status": "idea"
+ },
+ {
+  "id": "crown-b2-soxs-after-soxx-breakdown",
+  "symbol": "SOXS",
+  "asset": "equity",
+  "entry": [
+   [
+    "SOXX:close",
+    "<",
+    "SOXX:ll_20"
+   ],
+   [
+    "SOXX:volr_20",
+    ">=",
+    1.5
+   ],
+   [
+    "SOXX:close",
+    "<",
+    "SOXX:sma_50"
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 5,
+  "thesis": "Bearish semis expression: SOXX closes at new 20d low on 1.5x volume below its 50d; long 3x inverse SOXS for 5 bars (proxy for a SOXX put)",
+  "source": "crown-insights/play_2026-11-03.md (Crown Macro distill; rules written before data)",
+  "variants": 2,
+  "status": "idea"
+ },
+ {
+  "id": "crown-c-uso-trend-dip",
+  "symbol": "USO",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_200"
+   ],
+   [
+    "sma_50",
+    ">",
+    "sma_200"
+   ],
+   [
+    "rsi_2",
+    "<",
+    10
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 7,
+  "thesis": "Crown 'back to the well' oil: buy a short-term dip only inside an oil uptrend; short hold because he calls oil whack-a-mole",
+  "source": "crown-insights/play_2026-11-03.md (Crown Macro distill; rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "crown-d-rsp-rsi2-breadth",
+  "symbol": "RSP",
+  "asset": "equity",
+  "entry": [
+   [
+    "rsi_2",
+    "<",
+    10
+   ],
+   [
+    "close",
+    ">",
+    "sma_200"
+   ],
+   [
+    "ret_63",
+    ">",
+    "SPY:ret_63"
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 7,
+  "thesis": "New Crown angle (mean reversion, not momentum/volume like crown-a): buy short-term oversold dips in RSP only while equal-weight leads cap-weight over 3m and RSP is in a 200d uptrend",
+  "source": "crown-insights thesis.md 2026-11-03 (breadth rotation); rule written before data",
+  "variants": 1,
+  "status": "insufficient"
+ },
+ {
+  "id": "h01-qqq-rsi2-trend",
+  "symbol": "QQQ",
+  "asset": "equity",
+  "entry": [
+   [
+    "rsi_2",
+    "<",
+    10
+   ],
+   [
+    "close",
+    ">",
+    "sma_200"
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 7,
+  "thesis": "Mean reversion: QQQ short-term oversold inside 200d uptrend",
+  "source": "asset-manager batch 2026-11-03 (rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "h02-iwm-rsi2-trend",
+  "symbol": "IWM",
+  "asset": "equity",
+  "entry": [
+   [
+    "rsi_2",
+    "<",
+    10
+   ],
+   [
+    "close",
+    ">",
+    "sma_200"
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 7,
+  "thesis": "Mean reversion: IWM short-term oversold inside 200d uptrend",
+  "source": "asset-manager batch 2026-11-03 (rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "h03-spy-rsi2-breadth",
+  "symbol": "SPY",
+  "asset": "equity",
+  "entry": [
+   [
+    "rsi_2",
+    "<",
+    10
+   ],
+   [
+    "close",
+    ">",
+    "sma_200"
+   ],
+   [
+    "RSP:ret_63",
+    ">",
+    "ret_63"
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 7,
+  "thesis": "Regime filter: SPY dip-buy only when equal-weight leads cap-weight over 3m (Crown breadth)",
+  "source": "asset-manager batch 2026-11-03 (rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "h04-xle-brk50",
+  "symbol": "XLE",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "hh_50"
+   ],
+   [
+    "close",
+    ">",
+    "sma_200"
+   ]
+  ],
+  "stop": {
+   "atr": 3.0
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Trend: energy 50d breakout in uptrend (Crown long oil, via XLE not USO)",
+  "source": "asset-manager batch 2026-11-03 (rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "h05-xlv-vs-xlk-rotation",
+  "symbol": "XLV",
+  "asset": "equity",
+  "entry": [
+   [
+    "ret_20",
+    ">",
+    "XLK:ret_20"
+   ],
+   [
+    "close",
+    ">",
+    "sma_50"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Crown rotation: defensive non-AI sector (health care) beating tech over 20d and above its 50d",
+  "source": "asset-manager batch 2026-11-03 (rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "h06-tlt-trend",
+  "symbol": "TLT",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_50"
+   ],
+   [
+    "ret_20",
+    ">",
+    0
+   ],
+   [
+    "sma_50",
+    ">",
+    "sma_200"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Trend: long bonds when 50d>200d and rising (rates-falling regime)",
+  "source": "asset-manager batch 2026-11-03 (rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "h07-btc-rsi14-dip-regime",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "rsi_14",
+    "<",
+    35
+   ],
+   [
+    "close",
+    ">",
+    "sma_100"
+   ]
+  ],
+  "stop": {
+   "atr": 3.0
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 10,
+  "thesis": "Mean reversion: BTC oversold RSI14 while still above 100d (regime on)",
+  "source": "asset-manager batch 2026-11-03 (rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "h08-algo-below-range-va",
+  "symbol": "ALGO-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "close",
+    "<",
+    "ll_30"
+   ],
+   [
+    "BTC-USD:close",
+    ">",
+    "BTC-USD:sma_100"
+   ]
+  ],
+  "stop": {
+   "pct": 15
+  },
+  "target": null,
+  "time_exit_bars": 10,
+  "thesis": "Value-area reversion PROXY: ALGO closes below its 30d range low (below value area) while BTC regime on; expect re-acceptance",
+  "source": "asset-manager batch 2026-11-03 (rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "h09-eth-rsi2-btc-regime",
+  "symbol": "ETH-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "rsi_2",
+    "<",
+    10
+   ],
+   [
+    "BTC-USD:close",
+    ">",
+    "BTC-USD:sma_100"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 7,
+  "thesis": "Mean reversion: ETH sharp short-term dip while BTC regime on",
+  "source": "asset-manager batch 2026-11-03 (rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "s01-spy-pullback-h5",
+  "symbol": "SPY",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_200"
+   ],
+   [
+    "rsi_14",
+    "<",
+    35
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 7,
+  "thesis": "Strategy Tester H5 pullback: >200d & RSI14<35",
+  "source": "asset-manager batch2 2026-11-03 (Macro & News Watcher brief + Strategy Tester H2/H3/H5; rules written before data)",
+  "variants": 4,
+  "status": "idea"
+ },
+ {
+  "id": "s02-qqq-pullback-h5",
+  "symbol": "QQQ",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_200"
+   ],
+   [
+    "rsi_14",
+    "<",
+    35
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 7,
+  "thesis": "H5 pullback on QQQ",
+  "source": "asset-manager batch2 2026-11-03 (Macro & News Watcher brief + Strategy Tester H2/H3/H5; rules written before data)",
+  "variants": 4,
+  "status": "idea"
+ },
+ {
+  "id": "s03-iwm-pullback-h5",
+  "symbol": "IWM",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_200"
+   ],
+   [
+    "rsi_14",
+    "<",
+    35
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 7,
+  "thesis": "H5 pullback on IWM",
+  "source": "asset-manager batch2 2026-11-03 (Macro & News Watcher brief + Strategy Tester H2/H3/H5; rules written before data)",
+  "variants": 4,
+  "status": "idea"
+ },
+ {
+  "id": "s04-smh-pullback-h5",
+  "symbol": "SMH",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_200"
+   ],
+   [
+    "rsi_14",
+    "<",
+    35
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 7,
+  "thesis": "H5 pullback on SMH (semis bounce only while above 200d)",
+  "source": "asset-manager batch2 2026-11-03 (Macro & News Watcher brief + Strategy Tester H2/H3/H5; rules written before data)",
+  "variants": 4,
+  "status": "idea"
+ },
+ {
+  "id": "s05-soxx-200d-reclaim",
+  "symbol": "SOXX",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_200"
+   ],
+   [
+    "dd_20",
+    "<",
+    -0.1
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Semis bounce: SOXX back above 200d while still >10% off 20d high (reclaim after breakdown)",
+  "source": "asset-manager batch2 2026-11-03 (Macro & News Watcher brief + Strategy Tester H2/H3/H5; rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "s06-tlt-200d-reclaim",
+  "symbol": "TLT",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_200"
+   ],
+   [
+    "ret_20",
+    ">",
+    0.03
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Duration bid: TLT above 200d after a >3% 20d rally (rates falling)",
+  "source": "asset-manager batch2 2026-11-03 (Macro & News Watcher brief + Strategy Tester H2/H3/H5; rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "s07-ief-credit-stress",
+  "symbol": "IEF",
+  "asset": "equity",
+  "entry": [
+   [
+    "HYG:close",
+    "<",
+    "HYG:sma_200"
+   ],
+   [
+    "HYG:ret_20",
+    "<",
+    "ret_20"
+   ]
+  ],
+  "stop": {
+   "atr": 2.0
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Credit stress -> flight to quality: long IEF when HYG < 200d and HYG lags IEF over 20d",
+  "source": "asset-manager batch2 2026-11-03 (Macro & News Watcher brief + Strategy Tester H2/H3/H5; rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "s08-uso-brk20",
+  "symbol": "USO",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "hh_20"
+   ],
+   [
+    "close",
+    ">",
+    "sma_50"
+   ]
+  ],
+  "stop": {
+   "atr": 3.0
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Oil trend: USO 20d breakout above 50d (50d stop approximated by 3xATR; engine has no signal exit)",
+  "source": "asset-manager batch2 2026-11-03 (Macro & News Watcher brief + Strategy Tester H2/H3/H5; rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "s09-rsp-breadth-63",
+  "symbol": "RSP",
+  "asset": "equity",
+  "entry": [
+   [
+    "ret_63",
+    ">",
+    "SPY:ret_63"
+   ],
+   [
+    "close",
+    ">",
+    "sma_50"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Breadth: RSP beat SPY over 3m and RSP above 50d (no volume filter, unlike crown-a)",
+  "source": "asset-manager batch2 2026-11-03 (Macro & News Watcher brief + Strategy Tester H2/H3/H5; rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "s10-btc-sma50-trend",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_50"
+   ]
+  ],
+  "stop": {
+   "atr": 3.0
+  },
+  "target": null,
+  "time_exit_bars": 5,
+  "thesis": "Strategy Tester H2: BTC above 50d, re-checked every 5 bars (overlaps killed g04 on majors4; BTC-only test)",
+  "source": "asset-manager batch2 2026-11-03 (Macro & News Watcher brief + Strategy Tester H2/H3/H5; rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "s11-spy-200d-trend",
+  "symbol": "SPY",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_200"
+   ],
+   [
+    "sma_50",
+    ">",
+    "sma_200"
+   ]
+  ],
+  "stop": {
+   "atr": 3.0
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Strategy Tester H3 SPY 200d trend; 3% band NOT expressible in engine, approximated with SMA50>SMA200 confirmation",
+  "source": "asset-manager batch2 2026-11-03 (Macro & News Watcher brief + Strategy Tester H2/H3/H5; rules written before data)",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "t02-xlk-long-smh-relative-proxy",
+  "symbol": "XLK",
+  "asset": "equity",
+  "entry": [
+   [
+    "SMH:close",
+    "<",
+    "SMH:sma_200"
+   ],
+   [
+    "SMH:ret_20",
+    "<",
+    "ret_20"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "FORWARD-TEST / UNVALIDATED. Thesis: semiconductor weakness versus broader technology, requested short SMH / long XLK. Long-only tooling approximation: XLK long ONLY, no SMH short, not market-neutral and not a pair-return test. Manual thesis exit on SMH close reclaiming its contemporaneous SMA200 (~521.45 at Nov5; ~520 reference) OR SMH/XLK close ratio exceeding prior 20-session closing high (3.070432 at entry); dynamic thresholds on review. ATR stop and 20-bar time exit automated. Crown sub-industry UNKNOWN. Technicals are gate/risk, not thesis evidence.",
+  "source": "Kennedy explicit paper-only instruction 2026-11-05; public Yahoo daily OHLCV; no validation claimed",
+  "variants": 1,
+  "status": "idea"
+ },
+ {
+  "id": "t03-uup-dollar-europe-stress",
+  "symbol": "UUP",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_50"
+   ],
+   [
+    "ret_20",
+    ">",
+    0
+   ],
+   [
+    "HYG:close",
+    "<",
+    "HYG:sma_200"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Dollar bid from Europe/credit stress: Crown open Europe RV short + HYG below 200d; long UUP while UUP>SMA50 and 20d up with credit stress on",
+  "source": "asset-manager thesis-first 2026-11-06 (Crown Europe RV open Oct26; regime UUP uptrend I5; HYG downtrend I4; jobs/CPI window)",
+  "variants": 3,
+  "status": "insufficient"
+ },
+ {
+  "id": "t04-xlu-event-defensive",
+  "symbol": "XLU",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_50"
+   ],
+   [
+    "SPY:close",
+    "<",
+    "SPY:sma_50"
+   ],
+   [
+    "SPY:rsi_14",
+    "<",
+    40
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Defensive utilities bid into event risk when SPY is below SMA50 and RSI14<40 (VIX elevated / regime neutral); not XLV/XLK rotation",
+  "source": "asset-manager thesis-first 2026-11-06 (regime flip to neutral Nov6; VIX 28 99th pct; jobs Nov6 CPI Nov10; Crown avoid reflexive dip-buy)",
+  "variants": 3,
+  "status": "insufficient"
+ },
+ {
+  "id": "t05-xom-energy-ex-crude",
+  "symbol": "XOM",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_200"
+   ],
+   [
+    "USO:close",
+    "<",
+    "USO:sma_50"
+   ],
+   [
+    "ret_20",
+    ">",
+    "USO:ret_20"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Energy ex-crude: integrateds hold SMA200 and beat crude 20d after USO loses SMA50 (Crown better-oil/refiner history + Nov oil futures crash)",
+  "source": "asset-manager thesis-first 2026-11-06 (Crown oil crash Nov4-5; better-oil trade Oct8; refiners CRAK hist; USO still >200d but SMA50 lost per regime I7 mix)",
+  "variants": 3
+ },
+ {
+  "id": "t06-xlf-financials-rotation",
+  "symbol": "XLF",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_50"
+   ],
+   [
+    "ret_20",
+    ">",
+    "XLK:ret_20"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Post-midterm rotation into financials vs tech: XLF holds SMA50 and beats XLK over 20d (Congress flip + banks leadership)",
+  "source": "asset-manager thesis-first 2026-11-06 X-sentiment batch (X: XLF ATHs/rotation posts Nov4-5; Crown midterm catalyst; avoid JPM idiosyncratic Epstein headlines)",
+  "variants": 6,
+  "status": "screened-fail"
+ },
+ {
+  "id": "t07-xlp-staples-defensive",
+  "symbol": "XLP",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_50"
+   ],
+   [
+    "ret_20",
+    ">",
+    "XLK:ret_20"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Staples catch defensive bid while tech sells: XLP >SMA50 and beats XLK 20d into jobs/VIX stress (distinct from failed XLU event filter)",
+  "source": "asset-manager thesis-first 2026-11-06 X-sentiment (X: XLP +14% month / tech-staples ~30% relative; Crown fragile market; regime VIX 28)",
+  "variants": 6
+ },
+ {
+  "id": "t08-gdx-metals-miners",
+  "symbol": "GDX",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_50"
+   ],
+   [
+    "ret_20",
+    ">",
+    "SPY:ret_20"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Gold miners catch safe-haven/rotation bid after midterms and equity washout: GDX >SMA50 and beats SPY 20d (Crown metals up Nov5; GLD trend still down so miners are the expression)",
+  "source": "asset-manager thesis-first 2026-11-06 X-sentiment (X: GDX/GDXJ ~+9-10% Nov4 anecdotes; gold >$4000 posts; Crown metals up; Hail Mary metals hist UNKNOWN)",
+  "variants": 6,
+  "status": "screened-fail"
+ },
+ {
+  "id": "t09-msft-hyperscaler-vs-smh",
+  "symbol": "MSFT",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_50"
+   ],
+   [
+    "ret_20",
+    ">",
+    "SMH:ret_20"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Company leg of Crown AI Divergence: MSFT (hyperscaler/customer) holds SMA50 and beats SMH 20d while AI hardware is crushed",
+  "source": "asset-manager thesis-first 2026-11-06 X-sentiment (X: MSFT +6.7% Nov4 vs semis; FCF-positive hyperscaler anecdotes; Crown AI Divergence open; not a retest of XLK/SMH t02)",
+  "variants": 6
+ },
+ {
+  "id": "t10-aapl-platform-vs-smh",
+  "symbol": "AAPL",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_50"
+   ],
+   [
+    "ret_20",
+    ">",
+    "SMH:ret_20"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Platform/consumer mega-cap outperforms AI hardware in the same divergence: AAPL >SMA50 and beats SMH 20d",
+  "source": "asset-manager thesis-first 2026-11-06 X-sentiment (X: sold chips bought Apple Nov4 narrative; AAPL held up vs NVDA/MU crush Nov5)",
+  "variants": 6
+ },
+ {
+  "id": "t11-wmt-staples-name",
+  "symbol": "WMT",
+  "asset": "equity",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_50"
+   ],
+   [
+    "ret_20",
+    ">",
+    "SPY:ret_20"
+   ],
+   [
+    "QQQ:close",
+    "<",
+    "QQQ:sma_50"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Single-name staples/defensive consumer: WMT holds SMA50, beats SPY 20d, while QQQ is below its 50d (tech leadership broken)",
+  "source": "asset-manager thesis-first 2026-11-06 X-sentiment (X: WMT/COST named with XLP defensives; XLP leadership; QQQ mixed/below 200d in regime)",
+  "variants": 6
+ },
+ {
+  "id": "t12-spy-vix-spike-fade",
+  "symbol": "SPY",
+  "asset": "equity",
+  "entry": [
+   [
+    "^VIX:hh_5",
+    ">",
+    25
+   ],
+   [
+    "^VIX:ret_1",
+    "<",
+    -0.1
+   ],
+   [
+    "close",
+    ">",
+    "sma_200"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 10,
+  "thesis": "Hedge unwind: after a VIX spike above 25 in the last 5 days, a >10% one-day VIX drop while SPY holds its 200d marks hedges coming off; equities rebound over 2 weeks",
+  "source": "asset-manager flow briefing 2026-11-06 post-jobs (NFP +165k, VIX 28->~25, chips lead bounce, 10y ~4.85%, Dec hike odds ~75%)",
+  "variants": 3,
+  "status": "insufficient"
+ },
+ {
+  "id": "t13-smh-capitulation-snapback",
+  "symbol": "SMH",
+  "asset": "equity",
+  "entry": [
+   [
+    "ret_5",
+    "<",
+    -0.1
+   ],
+   [
+    "ret_1",
+    ">",
+    0.02
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 10,
+  "thesis": "Forced-seller capitulation in AI hardware: after a >10% 5-day crash, the first >2% up day marks sellers exhausted; semis snap back over 2 weeks",
+  "source": "asset-manager flow briefing 2026-11-06 post-jobs (NFP +165k, VIX 28->~25, chips lead bounce, 10y ~4.85%, Dec hike odds ~75%)",
+  "variants": 3,
+  "status": "insufficient"
+ },
+ {
+  "id": "t14-kre-front-end-rates",
+  "symbol": "KRE",
+  "asset": "equity",
+  "entry": [
+   [
+    "^IRX:ret_20",
+    ">",
+    0
+   ],
+   [
+    "close",
+    ">",
+    "sma_50"
+   ],
+   [
+    "^VIX:close",
+    "<",
+    30
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Hot labor data lifts front-end rates and hike odds; regional banks earn more on floating assets (NIM) while credit holds; KRE above 50d as gate",
+  "source": "asset-manager flow briefing 2026-11-06 post-jobs (NFP +165k, VIX 28->~25, chips lead bounce, 10y ~4.85%, Dec hike odds ~75%)",
+  "variants": 3,
+  "status": "insufficient"
+ },
+ {
+  "id": "t15-itb-long-yield-relief",
+  "symbol": "ITB",
+  "asset": "equity",
+  "entry": [
+   [
+    "TLT:ret_20",
+    ">",
+    0.03
+   ],
+   [
+    "close",
+    ">",
+    "sma_50"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Homebuilders are the most rate-sensitive equity industry; when long Treasuries rally >3% in 20d (falling mortgage rates) and ITB holds its 50d, builders should outperform. Not correlated with the AI/semis cluster.",
+  "source": "asset-manager 2026-11-09: TLT 1m +6.2% in readout; Crown rates theme (10y ~5% backdrop); rule written before data",
+  "variants": 2
+ },
+ {
+  "id": "c01-hashrate-trend-btc",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ext:hashrate",
+    ">",
+    "ext:hashrate.sma_60"
+   ],
+   [
+    "close",
+    ">",
+    "sma_100"
+   ]
+  ],
+  "stop": {
+   "pct": 8
+  },
+  "target": null,
+  "time_exit_bars": 15,
+  "thesis": "Hashrate confirmation: BTC network hashrate above 60d mean while price > SMA100 (Coin Metrics hashrate, 1d lag). Distinct from price-only SMA fails and from MVRV level rules.",
+  "source": "batch2b-crypto 2026-11-09 frozen pre-screen",
+  "variants": 1,
+  "coins": [
+   "BTC-USD"
+  ],
+  "status": "screened-pass"
+ },
+ {
+  "id": "c02-mvrv-cheap-btc",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ext:mvrv",
+    "<",
+    1.0
+   ],
+   [
+    "close",
+    ">",
+    "sma_50"
+   ]
+  ],
+  "stop": {
+   "pct": 8
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "MVRV undervaluation bounce: CapMVRV < 1 with price still above SMA50. Related family to failed n03 (MVRV>1.03) but opposite causal claim (cheap vs elevated).",
+  "source": "batch2b-crypto 2026-11-09 frozen pre-screen",
+  "variants": 1,
+  "coins": [
+   "BTC-USD"
+  ],
+  "status": "insufficient"
+ },
+ {
+  "id": "c03-funding-healthy-btc",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ext:funding_BTCUSDT",
+    ">",
+    0
+   ],
+   [
+    "ext:funding_BTCUSDT",
+    "<",
+    0.0003
+   ],
+   [
+    "close",
+    ">",
+    "sma_100"
+   ]
+  ],
+  "stop": {
+   "pct": 6
+  },
+  "target": null,
+  "time_exit_bars": 10,
+  "thesis": "Mild positive funding (0 to +0.03%/8h daily mean) with price > SMA100 \u2014 not euphoric, not capitulation. Distinct from insufficient n01 (funding < -0.05%).",
+  "source": "batch2b-crypto 2026-11-09 frozen pre-screen",
+  "variants": 1,
+  "coins": [
+   "BTC-USD"
+  ],
+  "status": "screened-fail"
+ },
+ {
+  "id": "c04-lowvol-trend-btc",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_100"
+   ],
+   [
+    "rv_20",
+    "<",
+    0.03
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 15,
+  "thesis": "Low realized-vol grind: price above SMA100 while 20d daily-return stdev < 3%. Opposite vol regime from killed g08 (20d high + expanding ATR).",
+  "source": "batch2b-crypto 2026-11-09 frozen pre-screen",
+  "variants": 1,
+  "coins": [
+   "BTC-USD"
+  ],
+  "status": "screened-fail"
+ },
+ {
+  "id": "c05-shallow-dip-btceth",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "dd_7",
+    "<",
+    -0.04
+   ],
+   [
+    "dd_7",
+    ">",
+    -0.12
+   ],
+   [
+    "close",
+    ">",
+    "sma_100"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 10,
+  "thesis": "Shallow 7d drawdown (\u22124% to \u221212%) inside SMA100 uptrend on BTC/ETH. Not g19 (15\u201325% / 30d golden-cross) or g09 (10d low + SMA200).",
+  "source": "batch2b-crypto 2026-11-09 frozen pre-screen",
+  "variants": 1,
+  "coins": [
+   "BTC-USD",
+   "ETH-USD"
+  ],
+  "status": "screened-fail"
+ },
+ {
+  "id": "c06-realizedcap-rising-btc",
+  "symbol": "BTC-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ext:realized_cap",
+    ">",
+    "ext:realized_cap.sma_30"
+   ],
+   [
+    "close",
+    ">",
+    "sma_50"
+   ]
+  ],
+  "stop": {
+   "pct": 8
+  },
+  "target": null,
+  "time_exit_bars": 20,
+  "thesis": "Realized cap rising (30d): aggregate cost basis climbing with price > SMA50. Uses realized_cap series, not MVRV level (n03 failed).",
+  "source": "batch2b-crypto 2026-11-09 frozen pre-screen",
+  "variants": 1,
+  "coins": [
+   "BTC-USD"
+  ],
+  "status": "screened-fail"
+ },
+ {
+  "id": "a01-alts-hashrate-gate",
+  "symbol": "SOL-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ext:hashrate",
+    ">",
+    "ext:hashrate.sma_60"
+   ],
+   [
+    "close",
+    ">",
+    "sma_100"
+   ]
+  ],
+  "stop": {
+   "pct": 10
+  },
+  "target": null,
+  "time_exit_bars": 15,
+  "thesis": "Alt long when BTC network hashrate >60d mean (liquidity/security regime gate) and alt >SMA100. Trades ALTS not BTC (unlike c01). Includes ALGO+SOL.",
+  "source": "batch-alts 2026-11-09 frozen; substitute Coinbase history (GMGN/post sources not keyless)",
+  "variants": 1,
+  "coins": [
+   "ALGO-USD",
+   "SOL-USD",
+   "ADA-USD",
+   "XRP-USD",
+   "AVAX-USD",
+   "DOT-USD",
+   "LINK-USD",
+   "ATOM-USD",
+   "LTC-USD",
+   "DOGE-USD",
+   "NEAR-USD",
+   "BCH-USD"
+  ],
+  "status": "screened-fail"
+ },
+ {
+  "id": "a02-alts-rsi14-btc-regime",
+  "symbol": "ALGO-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "rsi_14",
+    "<",
+    30
+   ],
+   [
+    "BTC-USD:close",
+    ">",
+    "BTC-USD:sma_100"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": {
+   "R": 1.5
+  },
+  "time_exit_bars": 10,
+  "thesis": "Alt RSI14 oversold (<30) while BTC holds SMA100. Not killed RSI(2)-on-alts; not h07 (BTC-only) or h09 (ETH RSI2).",
+  "source": "batch-alts 2026-11-09 frozen; substitute Coinbase history",
+  "variants": 1,
+  "coins": [
+   "ALGO-USD",
+   "SOL-USD",
+   "ADA-USD",
+   "XRP-USD",
+   "AVAX-USD",
+   "DOT-USD",
+   "LINK-USD",
+   "ATOM-USD",
+   "LTC-USD",
+   "DOGE-USD",
+   "NEAR-USD",
+   "BCH-USD"
+  ],
+  "status": "insufficient"
+ },
+ {
+  "id": "a03-alts-vs-eth-rs",
+  "symbol": "SOL-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "ret_20",
+    ">",
+    "ETH-USD:ret_20"
+   ],
+   [
+    "close",
+    ">",
+    "sma_50"
+   ]
+  ],
+  "stop": {
+   "atr": 3
+  },
+  "target": null,
+  "time_exit_bars": 10,
+  "thesis": "Alt 20d relative strength vs ETH (not vs BTC/g14) while above SMA50. Distinct from killed g14 and watch g16 ETH/BTC.",
+  "source": "batch-alts 2026-11-09 frozen; substitute Coinbase history",
+  "variants": 1,
+  "coins": [
+   "ALGO-USD",
+   "SOL-USD",
+   "ADA-USD",
+   "XRP-USD",
+   "AVAX-USD",
+   "DOT-USD",
+   "LINK-USD",
+   "ATOM-USD",
+   "LTC-USD",
+   "DOGE-USD",
+   "NEAR-USD",
+   "BCH-USD"
+  ],
+  "status": "screened-fail"
+ },
+ {
+  "id": "a04-alts-mid-dip",
+  "symbol": "ALGO-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "dd_20",
+    "<",
+    -0.08
+   ],
+   [
+    "dd_20",
+    ">",
+    -0.18
+   ],
+   [
+    "close",
+    ">",
+    "sma_100"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 10,
+  "thesis": "Mid 20d drawdown (\u22128% to \u221218%) on alts inside SMA100 uptrend. Shallower/shorter than killed g19 (15\u201325%/30d golden-cross); not g09 10d low.",
+  "source": "batch-alts 2026-11-09 frozen; substitute Coinbase history",
+  "variants": 1,
+  "coins": [
+   "ALGO-USD",
+   "SOL-USD",
+   "ADA-USD",
+   "XRP-USD",
+   "AVAX-USD",
+   "DOT-USD",
+   "LINK-USD",
+   "ATOM-USD",
+   "LTC-USD",
+   "DOGE-USD",
+   "NEAR-USD",
+   "BCH-USD"
+  ],
+  "status": "screened-fail"
+ },
+ {
+  "id": "a05-alts-lowvol-trend",
+  "symbol": "SOL-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "close",
+    ">",
+    "sma_100"
+   ],
+   [
+    "rv_20",
+    "<",
+    0.04
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 15,
+  "thesis": "Low realized-vol grind on alts (rv20<4%) above SMA100. Same mechanism class as failed BTC c04 but alt universe; still a distinct asset set test.",
+  "source": "batch-alts 2026-11-09 frozen; substitute Coinbase history",
+  "variants": 1,
+  "coins": [
+   "ALGO-USD",
+   "SOL-USD",
+   "ADA-USD",
+   "XRP-USD",
+   "AVAX-USD",
+   "DOT-USD",
+   "LINK-USD",
+   "ATOM-USD",
+   "LTC-USD",
+   "DOGE-USD",
+   "NEAR-USD",
+   "BCH-USD"
+  ],
+  "status": "screened-fail"
+ },
+ {
+  "id": "a06-alts-vol-thrust",
+  "symbol": "LINK-USD",
+  "asset": "crypto",
+  "entry": [
+   [
+    "volr_20",
+    ">",
+    1.5
+   ],
+   [
+    "ret_5",
+    ">",
+    0.02
+   ],
+   [
+    "close",
+    ">",
+    "sma_50"
+   ]
+  ],
+  "stop": {
+   "atr": 3
+  },
+  "target": null,
+  "time_exit_bars": 8,
+  "thesis": "Volume thrust: vol \u22651.5\u00d720d avg with +2% 5d return above SMA50. Opposite of insufficient g18 washout (negative ret + high vol).",
+  "source": "batch-alts 2026-11-09 frozen; substitute Coinbase history",
+  "variants": 1,
+  "coins": [
+   "ALGO-USD",
+   "SOL-USD",
+   "ADA-USD",
+   "XRP-USD",
+   "AVAX-USD",
+   "DOT-USD",
+   "LINK-USD",
+   "ATOM-USD",
+   "LTC-USD",
+   "DOGE-USD",
+   "NEAR-USD",
+   "BCH-USD"
+  ],
+  "status": "screened-pass"
+ },
+ {
+  "id": "t16-soxs-fade-semis-bear-rally",
+  "symbol": "SOXS",
+  "asset": "equity",
+  "entry": [
+   [
+    "SMH:close",
+    "<",
+    "SMH:sma_200"
+   ],
+   [
+    "SMH:ret_5",
+    ">",
+    0.05
+   ],
+   [
+    "HYG:close",
+    "<",
+    "HYG:sma_50"
+   ]
+  ],
+  "stop": {
+   "atr": 2.5
+  },
+  "target": null,
+  "time_exit_bars": 5,
+  "thesis": "Fade AI-hardware relief rallies inside a semis downtrend while credit is tight: when SMH is below its 200d, rallies >5% in 5 days, and HYG is under its 50d, inverse semis (SOXS) should gain over the next week. Long-only expression of Crown's Nov 11 bearish-against-AI-rally trade; not correlated with the RSP/SPY/QQQ long cluster.",
+  "source": "asset-manager 2026-11-12: Crown Nov 11 'We don't trust this rally' (structure locked); SMH < SMA200 in readout; rule written before data",
+  "variants": 1
+ }
 ]

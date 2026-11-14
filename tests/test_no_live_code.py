@@ -29,6 +29,11 @@ class NoLiveCode(unittest.TestCase):
     def test_only_post_is_allowlisted_info_call(self):
         posts = [str(p.relative_to(ROOT)) for p in ROOT.rglob("*.py") if "out" not in p.parts and p.resolve() != Path(__file__).resolve() and "data=" in p.read_text() and "urlopen" in p.read_text()]
         self.assertEqual(posts, ["tt/http.py"])
+    def test_websocket_hosts_allowlisted(self):
+        # read-only public streams only; adding a host means editing this set on purpose
+        hosts = {h for p in ROOT.rglob("*.py") if "out" not in p.parts and p.resolve() != Path(__file__).resolve()
+                 for h in re.findall(r"wss://([^/:'\"]+)", p.read_text())}
+        self.assertLessEqual(hosts, {"stream.binance.us"})
     def test_scanner_catches_planted_code(self):
         with tempfile.TemporaryDirectory() as d:
             (Path(d) / "bad.py").write_text("client." + "create" + "_order('BTC', 1)\n")

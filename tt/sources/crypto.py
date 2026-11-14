@@ -41,3 +41,13 @@ def load_hourly_fixture(path):
     """flow's cached 1h candles: JSON list of {timestamp(ms), open, high, low, close, volume}. Test fixtures only."""
     rows = json.loads(open(path).read())
     return [dict(ts=int(r["timestamp"]), **{k: float(r[k]) for k in ("open", "high", "low", "close", "volume")}) for r in rows]
+
+def binance_klines(base, interval="1h", limit=720):
+    """Binance public spot klines for {base}USDT (data-api.binance.vision, market data only; as Crypto Scout
+    crypto-tracker/compare/market.py). Same candle dicts as load_hourly_fixture. The still-open candle is dropped."""
+    if not 1 <= limit <= 1000: raise ValueError("limit must be 1..1000 (one request)")
+    url = f"https://data-api.binance.vision/api/v3/klines?symbol={base.upper()}USDT&interval={interval}&limit={limit + 1}"
+    now_ms = dt.datetime.now(dt.timezone.utc).timestamp() * 1000
+    rows = [r for r in json.loads(get(url)) if r[6] < now_ms]          # r[6] = close time (ms)
+    return dict(candles=[dict(ts=int(r[0]), **{k: float(r[i]) for i, k in enumerate(("open", "high", "low", "close", "volume"), 1)})
+                         for r in rows[-limit:]], source=f"Binance public klines {base.upper()}USDT {interval} (data-api.binance.vision)")

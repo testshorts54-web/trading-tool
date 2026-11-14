@@ -1,5 +1,9 @@
-# Python 3.13. Only third-party dependency; everything else is stdlib.
+# Python 3.13. yfinance is required; websockets is optional (predict_scan.py). Everything else is stdlib.
 yfinance==1.7.0
+websockets==17.3  # optional: predict_scan.py spot stream (falls back to REST without it)
 # yfinance pulls these; pinned to the versions this was tested with
 pandas==3.0.6
 numpy==2.5.4
+# optional research tools (optimize.py, tearsheet.py); vetted 2026-11-01, pure-python wheels, no telemetry, no network on import
+optuna==5.0.0
+quantstats==0.0.86

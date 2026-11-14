@@ -1,0 +1,65 @@
+{
+  "status": "success",
+  "data": [
+    {
+      "chain": "Ethereum",
+      "project": "aave-v3",
+      "symbol": "USDC",
+      "tvlUsd": 173700000,
+      "apy": 3.8,
+      "apyBase": 3.8,
+      "apyReward": null,
+      "apyMean30d": 4.28,
+      "poolMeta": null,
+      "pool": "a"
+    },
+    {
+      "chain": "Ethereum",
+      "project": "aave-v3",
+      "symbol": "USDC",
+      "tvlUsd": 54500000,
+      "apy": 5.59,
+      "apyBase": 3.8,
+      "apyReward": 1.79,
+      "apyMean30d": 5.93,
+      "poolMeta": "Umbrella",
+      "pool": "b"
+    },
+    {
+      "chain": "Ethereum",
+      "project": "sky-lending",
+      "symbol": "SUSDS",
+      "tvlUsd": 3743500000,
+      "apy": 3.8,
+      "apyBase": 3.8,
+      "apyReward": null,
+      "apyMean30d": 3.8,
+      "poolMeta": null,
+      "pool": "c"
+    },
+    {
+      "chain": "Ethereum",
+      "project": "sky-lending",
+      "symbol": "STUSDS",
+      "tvlUsd": 161600000,
+      "apy": 13.05,
+      "apyBase": 13.05,
+      "apyReward": null,
+      "apyMean30d": 7.11,
+      "poolMeta": "Expert Mode",
+      "pool": "d"
+    },
+    {
+      "chain": "Ethereum",
+      "project": "pendle-v2",
+      "symbol": "X",
+      "tvlUsd": 6400000,
+      "apy": 24.0,
+      "apyBase": 24.0,
+      "apyReward": null,
+      "apyMean30d": 24.0,
+      "poolMeta": "For buying PT",
+      "pool": "e"
+    }
+  ]
+}

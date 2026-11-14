@@ -45,4 +45,23 @@ class Dutch(unittest.TestCase):
         src = inspect.getsource(P).lower().replace("nothing is called risk-free or guaranteed", "")
         self.assertNotIn("risk-free", src); self.assertNotIn("guaranteed", src)
 
+class Scan(unittest.TestCase):
+    def test_fee_unknown_and_formula(self):
+        self.assertIsNone(P.fee_per_share(0.5, None)); self.assertAlmostEqual(P.fee_per_share(0.5, 0.07), 0.0175)
+    def test_crypto_parse_and_model(self):
+        self.assertEqual(P.parse_crypto_q("Will the price of Bitcoin be above $70,000 on November 1?"), ("BTC", "above", 70000.0))
+        self.assertEqual(P.parse_crypto_q("Will the price of Ethereum be less than $1,900 on November 1?")[1], "below")
+        for q in ("Will Bitcoin reach $150,000 in October?", "Will the price of Bitcoin be between $70,000 and $72,000 on November 1?"):
+            self.assertIsNone(P.parse_crypto_q(q))
+        hi = P.model_p_yes(80000, 70000, "above", 14 / 8760, 1.0); self.assertGreater(hi, 0.99)
+        self.assertAlmostEqual(P.model_p_yes(80000, 70000, "below", 14 / 8760, 1.0), 1 - hi); self.assertIsNone(P.model_p_yes(1, 1, "above", 0, 1))
+    def test_size_binary_one_pct_and_depth(self):
+        a = P.size_binary(0.95, 10_000); self.assertEqual(a["qty"], 105); self.assertLessEqual(a["risk_pct"], 0.01); self.assertEqual(a["binding"], "1% risk")
+        self.assertEqual(P.size_binary(0.95, 10_000, 50)["binding"], "book depth")
+        with self.assertRaises(ValueError): P.size_binary(0.95, None)
+    def test_augmented_event_never_flagged(self):
+        ms = [dict(best_ask=0.2, prices=[0.2], title=t, other=False) for t in "ABC"]
+        self.assertTrue(P.event_dutch_book(dict(markets=ms, end=None))["flagged"])
+        self.assertFalse(P.event_dutch_book(dict(markets=ms, end=None, augmented=True))["flagged"])
+
 if __name__ == "__main__": unittest.main()
